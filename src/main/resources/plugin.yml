@@ -1,4 +1,4 @@
 name: MagicWar
 main: com.manato1fg.mw.Main
-version: "0.0.1"
+version: "0.0.1-Pocky"
 api: ["1.0.7"]

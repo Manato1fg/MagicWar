@@ -46,7 +46,7 @@ public class FlowerGranade {
 	
 	// r = 0.5*s*a^2+sin(2*k*c)+s*cos^2(kac)-sin(kc)
 	
-	private double[] rtheta = null;
+	private static double[] rtheta = null;
 	
 	private Position pos;
 	private Player owner;
@@ -57,11 +57,11 @@ public class FlowerGranade {
 		this.owner = owner;
 		this.pos = pos;
 		this.main = main;
-		this.taskId = this.main.getServer().getScheduler().scheduleRepeatingTask(new FlowerGranadeTask(main, this), 1).getTaskId();
+		this.taskId = this.main.getServer().getScheduler().scheduleRepeatingTask(new FlowerGranadeTask(main, this), 4).getTaskId();
 	}
 	
 	public void onRun() {
-		this.timeTick ++;
+		this.timeTick += 4;
 		
 		//end
 		if(this.timeTick == 60) {
@@ -69,18 +69,18 @@ public class FlowerGranade {
 			this.kill();
 			return;
 		}
-		int l = 120;
-		if(this.rtheta == null) {
+		int l = 100;
+		if(rtheta == null) {
 			//Calc once.
-			this.rtheta = new double[l];
+			rtheta = new double[l];
 			
-			for(int i = 0; i < this.rtheta.length; i++) {
+			for(int i = 0; i < rtheta.length; i++) {
 				double theta = MF.deg2rad(i * 360 / l);
 				double r = 0.5 * s * a * a * MF.sin(2 * k * theta);
 				r += s * MF.cos(a * k * theta) * MF.cos(a * k * theta);
 				r -= MF.sin(k * theta);
 				r *= scale;
-				this.rtheta[i] = r;
+				rtheta[i] = r;
 			}
 		}
 		
@@ -89,9 +89,9 @@ public class FlowerGranade {
 		double d = (double) (this.timeTick * this.timeTick) * this.fa;
 		double cos = MF.cos(MF.deg2rad(d));
 		double sin = MF.sin(MF.deg2rad(d));
-		for(int i = 0; i < this.rtheta.length; i++) {
+		for(int i = 0; i < l; i++) {
 			double theta = MF.deg2rad(i * 360 / l);
-			double r = this.rtheta[i];
+			double r = rtheta[i];
 			x = r * MF.cos(theta);
 			y = r * MF.sin(theta);
 			xx = x * cos - y * sin;
